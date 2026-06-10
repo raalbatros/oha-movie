@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OHA Film Player</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <header>
+            <h1>🎬 OHA Film Player</h1>
+            <p>Tüm filmler tek yerde</p>
+        </header>
+        
+        <div class="search-box">
+            <input type="text" id="search" placeholder="🔍 Film ara..." onkeyup="searchMovies()">
+        </div>
+        
+        <div class="main">
+            <div class="sidebar">
+                <h3>📋 Film Listesi</h3>
+                <div id="movieList" class="movie-list"></div>
+            </div>
+            
+            <div class="player-area">
+                <div class="video-container">
+                    <iframe id="player" src="about:blank"></iframe>
+                </div>
+                <div id="info" class="info">
+                    <p>👈 Soldan bir film seçin</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
