@@ -1,34 +1,33 @@
 let movies = [];
 
-// Filmleri yükle
 async function loadMovies() {
     try {
         const response = await fetch('movies.json');
+        if (!response.ok) throw new Error('movies.json yüklenemedi');
         movies = await response.json();
         displayMovies(movies);
-        console.log(`${movies.length} film yüklendi`);
+        document.getElementById('info').innerHTML = `<p>✅ ${movies.length} film hazır! Film seçin.</p>`;
     } catch (error) {
-        console.error('Filmler yüklenemedi:', error);
-        // Demo veri
-        movies = [
-            {id: "movie.1339713", name: "Obsession", year: "2026"},
-            {id: "movie.1228710", name: "The Mandalorian and Grogu", year: "2026"}
-        ];
-        displayMovies(movies);
+        console.error('Hata:', error);
+        document.getElementById('movieList').innerHTML = '<div style="color: red;">movies.json yüklenemedi! Dosyayı kontrol edin.</div>';
+        document.getElementById('info').innerHTML = '<p>❌ movies.json dosyası bulunamadı. Lütfen dosyayı oluşturun.</p>';
     }
 }
 
-// Filmleri listele
 function displayMovies(movieList) {
     const container = document.getElementById('movieList');
+    if (!movieList || movieList.length === 0) {
+        container.innerHTML = '<div>Film bulunamadı</div>';
+        return;
+    }
+    
     container.innerHTML = movieList.map((movie, index) => `
-        <div class="movie-item" onclick="playMovie('${movie.id}', '${movie.name}')">
+        <div class="movie-item" onclick="playMovie('${movie.id}', '${movie.name.replace(/'/g, "\\'")}')">
             <strong>${index + 1}.</strong> ${movie.name} (${movie.year})
         </div>
     `).join('');
 }
 
-// Film oynat
 function playMovie(movieId, movieName) {
     const player = document.getElementById('player');
     const watchUrl = `https://www.oha.to/web-vod/watch/${movieId}`;
@@ -44,13 +43,12 @@ function playMovie(movieId, movieName) {
     // Aktif sınıfını güncelle
     document.querySelectorAll('.movie-item').forEach(item => {
         item.classList.remove('active');
-        if (item.innerText.includes(movieName)) {
+        if (item.innerText.includes(movieName.substring(0, 20))) {
             item.classList.add('active');
         }
     });
 }
 
-// Film ara
 function searchMovies() {
     const searchTerm = document.getElementById('search').value.toLowerCase();
     const filtered = movies.filter(movie => 
